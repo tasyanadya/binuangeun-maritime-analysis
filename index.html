@@ -1,0 +1,384 @@
+import React, { useState, useMemo } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Waves, Wind, Sun, Droplets, Thermometer, Activity, Calendar, Clock } from 'lucide-react';
+
+// DATA REAL ERA5 45 TAHUN (1980-2024)
+const realData = {
+  seasonal: {
+    SHC: {1: 1.72, 2: 1.73, 3: 1.70, 4: 1.79, 5: 2.06, 6: 2.27, 7: 2.44, 8: 2.45, 9: 2.32, 10: 2.03, 11: 1.75, 12: 1.66},
+    MWP: {1: 9.26, 2: 9.34, 3: 9.93, 4: 10.30, 5: 10.19, 6: 10.30, 7: 9.97, 8: 9.71, 9: 9.63, 10: 9.49, 11: 9.29, 12: 9.39},
+    SSRD: {1: 70.13, 2: 71.59, 3: 75.58, 4: 73.38, 5: 70.97, 6: 67.05, 7: 70.86, 8: 79.94, 9: 85.55, 10: 85.11, 11: 75.56, 12: 72.25},
+    TP: {1: 0.519, 2: 0.514, 3: 0.386, 4: 0.316, 5: 0.218, 6: 0.190, 7: 0.135, 8: 0.066, 9: 0.099, 10: 0.194, 11: 0.376, 12: 0.445},
+    T2: {1: 26.45, 2: 26.57, 3: 26.87, 4: 27.14, 5: 27.36, 6: 26.95, 7: 26.24, 8: 25.76, 9: 25.63, 10: 26.09, 11: 26.44, 12: 26.50},
+    WIND: {1: 3.40, 2: 3.64, 3: 1.31, 4: 1.86, 5: 4.83, 6: 5.43, 7: 6.99, 8: 7.83, 9: 7.52, 10: 6.25, 11: 3.84, 12: 1.42}
+  },
+  hourly: {
+    SHC: {
+      1: {0: 1.72, 3: 1.72, 6: 1.72, 9: 1.72, 12: 1.72, 15: 1.72, 18: 1.72, 21: 1.72},
+      2: {0: 1.73, 3: 1.73, 6: 1.73, 9: 1.73, 12: 1.73, 15: 1.73, 18: 1.73, 21: 1.73},
+      3: {0: 1.70, 3: 1.70, 6: 1.70, 9: 1.70, 12: 1.70, 15: 1.70, 18: 1.70, 21: 1.70},
+      4: {0: 1.79, 3: 1.79, 6: 1.79, 9: 1.79, 12: 1.79, 15: 1.79, 18: 1.79, 21: 1.79},
+      5: {0: 2.06, 3: 2.06, 6: 2.06, 9: 2.06, 12: 2.06, 15: 2.06, 18: 2.06, 21: 2.06},
+      6: {0: 2.27, 3: 2.27, 6: 2.27, 9: 2.27, 12: 2.27, 15: 2.27, 18: 2.27, 21: 2.27},
+      7: {0: 2.44, 3: 2.44, 6: 2.44, 9: 2.44, 12: 2.44, 15: 2.44, 18: 2.44, 21: 2.44},
+      8: {0: 2.45, 3: 2.45, 6: 2.45, 9: 2.45, 12: 2.45, 15: 2.45, 18: 2.45, 21: 2.45},
+      9: {0: 2.32, 3: 2.32, 6: 2.32, 9: 2.32, 12: 2.32, 15: 2.32, 18: 2.32, 21: 2.32},
+      10: {0: 2.03, 3: 2.03, 6: 2.03, 9: 2.03, 12: 2.03, 15: 2.03, 18: 2.03, 21: 2.03},
+      11: {0: 1.75, 3: 1.75, 6: 1.75, 9: 1.75, 12: 1.75, 15: 1.75, 18: 1.75, 21: 1.75},
+      12: {0: 1.66, 3: 1.66, 6: 1.66, 9: 1.66, 12: 1.66, 15: 1.66, 18: 1.66, 21: 1.66}
+    },
+    WIND: {
+      1: {0: 3.40, 3: 3.40, 6: 3.39, 9: 3.39, 12: 3.41, 15: 3.42, 18: 3.39, 21: 3.40},
+      2: {0: 3.64, 3: 3.64, 6: 3.63, 9: 3.64, 12: 3.65, 15: 3.66, 18: 3.63, 21: 3.64},
+      3: {0: 1.32, 3: 1.30, 6: 1.32, 9: 1.30, 12: 1.30, 15: 1.30, 18: 1.31, 21: 1.31},
+      4: {0: 1.84, 3: 1.86, 6: 1.84, 9: 1.86, 12: 1.87, 15: 1.87, 18: 1.86, 21: 1.87},
+      5: {0: 4.84, 3: 4.87, 6: 4.83, 9: 4.83, 12: 4.83, 15: 4.84, 18: 4.81, 21: 4.83},
+      6: {0: 5.44, 3: 5.48, 6: 5.41, 9: 5.41, 12: 5.43, 15: 5.44, 18: 5.41, 21: 5.43},
+      7: {0: 7.00, 3: 7.04, 6: 6.97, 9: 6.98, 12: 7.00, 15: 7.02, 18: 6.97, 21: 6.98},
+      8: {0: 7.85, 3: 7.87, 6: 7.79, 9: 7.81, 12: 7.83, 15: 7.85, 18: 7.81, 21: 7.83},
+      9: {0: 7.55, 3: 7.56, 6: 7.48, 9: 7.49, 12: 7.51, 15: 7.52, 18: 7.50, 21: 7.51},
+      10: {0: 6.30, 3: 6.31, 6: 6.23, 9: 6.22, 12: 6.22, 15: 6.23, 18: 6.23, 21: 6.26},
+      11: {0: 3.89, 3: 3.91, 6: 3.84, 9: 3.82, 12: 3.81, 15: 3.81, 18: 3.81, 21: 3.83},
+      12: {0: 1.43, 3: 1.44, 6: 1.44, 9: 1.41, 12: 1.40, 15: 1.39, 18: 1.40, 21: 1.43}
+    },
+    SSRD: {
+      1: {0: 66.08, 3: 65.95, 6: 66.46, 9: 66.69, 12: 70.32, 15: 77.08, 18: 77.57, 21: 70.88},
+      2: {0: 67.24, 3: 66.41, 6: 66.76, 9: 67.19, 12: 71.54, 15: 79.12, 18: 80.26, 21: 74.20},
+      3: {0: 70.56, 3: 69.43, 6: 69.53, 9: 70.05, 12: 76.59, 15: 84.51, 18: 85.44, 21: 78.52},
+      4: {0: 67.70, 3: 66.48, 6: 66.25, 9: 67.26, 12: 76.33, 15: 83.64, 18: 83.33, 21: 76.07},
+      5: {0: 64.69, 3: 63.75, 6: 63.67, 9: 65.13, 12: 74.79, 15: 81.50, 18: 81.03, 21: 73.21},
+      6: {0: 60.81, 3: 59.44, 6: 59.50, 9: 61.00, 12: 70.73, 15: 77.57, 18: 77.38, 21: 69.94},
+      7: {0: 65.08, 3: 63.51, 6: 63.47, 9: 64.12, 12: 73.35, 15: 81.07, 18: 81.58, 21: 74.66},
+      8: {0: 73.91, 3: 73.24, 6: 73.04, 9: 73.08, 12: 82.17, 15: 90.26, 18: 90.61, 21: 83.22},
+      9: {0: 79.51, 3: 79.60, 6: 79.22, 9: 79.30, 12: 88.82, 15: 96.09, 18: 95.38, 21: 86.50},
+      10: {0: 79.48, 3: 79.93, 6: 79.69, 9: 80.45, 12: 89.28, 15: 95.23, 18: 93.33, 21: 83.47},
+      11: {0: 70.74, 3: 70.93, 6: 71.14, 9: 72.02, 12: 79.20, 15: 84.42, 18: 82.32, 21: 73.71},
+      12: {0: 68.27, 3: 68.39, 6: 68.61, 9: 68.88, 12: 73.76, 15: 79.52, 18: 78.75, 21: 71.80}
+    },
+    TP: {
+      1: {0: 0.520, 3: 0.518, 6: 0.520, 9: 0.513, 12: 0.514, 15: 0.522, 18: 0.521, 21: 0.528},
+      2: {0: 0.519, 3: 0.514, 6: 0.513, 9: 0.501, 12: 0.504, 15: 0.516, 18: 0.519, 21: 0.524},
+      3: {0: 0.390, 3: 0.386, 6: 0.385, 9: 0.378, 12: 0.378, 15: 0.387, 18: 0.390, 21: 0.394},
+      4: {0: 0.328, 3: 0.318, 6: 0.313, 9: 0.307, 12: 0.305, 15: 0.312, 18: 0.319, 21: 0.327},
+      5: {0: 0.223, 3: 0.215, 6: 0.213, 9: 0.218, 12: 0.214, 15: 0.217, 18: 0.219, 21: 0.221},
+      6: {0: 0.196, 3: 0.185, 6: 0.180, 9: 0.191, 12: 0.189, 15: 0.190, 18: 0.192, 21: 0.199},
+      7: {0: 0.139, 3: 0.133, 6: 0.129, 9: 0.135, 12: 0.135, 15: 0.136, 18: 0.136, 21: 0.139},
+      8: {0: 0.069, 3: 0.065, 6: 0.062, 9: 0.063, 12: 0.063, 15: 0.065, 18: 0.067, 21: 0.070},
+      9: {0: 0.104, 3: 0.098, 6: 0.093, 9: 0.095, 12: 0.096, 15: 0.099, 18: 0.102, 21: 0.107},
+      10: {0: 0.201, 3: 0.195, 6: 0.190, 9: 0.187, 12: 0.185, 15: 0.192, 18: 0.198, 21: 0.208},
+      11: {0: 0.382, 3: 0.373, 6: 0.368, 9: 0.369, 12: 0.367, 15: 0.377, 18: 0.380, 21: 0.390},
+      12: {0: 0.445, 3: 0.439, 6: 0.440, 9: 0.440, 12: 0.443, 15: 0.452, 18: 0.448, 21: 0.454}
+    }
+  }
+};
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const HOURS = ['00', '03', '06', '09', '12', '15', '18', '21'];
+
+const PARAMETERS = {
+  SHC: { name: 'Wave Height', unit: 'm', icon: Waves, color: '#3b82f6' },
+  MWP: { name: 'Wave Period', unit: 's', icon: Activity, color: '#8b5cf6' },
+  SSRD: { name: 'Solar Radiation', unit: 'W/m²', icon: Sun, color: '#f59e0b' },
+  TP: { name: 'Precipitation', unit: 'm', icon: Droplets, color: '#06b6d4' },
+  WIND: { name: 'Wind Speed', unit: 'm/s', icon: Wind, color: '#10b981' },
+  T2: { name: 'Temperature', unit: '°C', icon: Thermometer, color: '#ef4444' }
+};
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('seasonal');
+  const [selectedParam, setSelectedParam] = useState('SHC');
+
+  const seasonalChartData = useMemo(() => {
+    return MONTHS.map((month, idx) => {
+      const monthNum = idx + 1;
+      return {
+        month,
+        SHC: realData.seasonal.SHC[monthNum],
+        WIND: realData.seasonal.WIND[monthNum],
+        SSRD: realData.seasonal.SSRD[monthNum],
+        TP: realData.seasonal.TP[monthNum] * 1000,
+      };
+    });
+  }, []);
+
+  const insights = useMemo(() => {
+    const shc = realData.seasonal.SHC;
+    const ssrd = realData.seasonal.SSRD;
+
+    const shcValues = Object.values(shc);
+    const ssrdValues = Object.values(ssrd);
+    
+    const minWave = Math.min(...shcValues);
+    const maxWave = Math.max(...shcValues);
+    const maxSolar = Math.max(...ssrdValues);
+
+    const safestMonth = Object.keys(shc).reduce((a, b) => shc[a] < shc[b] ? a : b);
+    const highestWaveMonth = Object.keys(shc).reduce((a, b) => shc[a] > shc[b] ? a : b);
+    const bestSolarMonth = Object.keys(ssrd).reduce((a, b) => ssrd[a] > ssrd[b] ? a : b);
+
+    return [
+      {
+        icon: Sun,
+        title: 'Optimal Drying Season',
+        value: MONTHS[parseInt(bestSolarMonth) - 1],
+        desc: `Highest solar radiation (${maxSolar.toFixed(1)} W/m²) with minimal rain`,
+        color: 'bg-orange-50 border-orange-200 text-orange-800'
+      },
+      {
+        icon: Waves,
+        title: 'Safest Fishing Period',
+        value: MONTHS[parseInt(safestMonth) - 1],
+        desc: `Lowest wave height (${minWave.toFixed(2)}m) - ideal for small boats`,
+        color: 'bg-blue-50 border-blue-200 text-blue-800'
+      },
+      {
+        icon: Wind,
+        title: 'Maintenance Window',
+        value: MONTHS[parseInt(highestWaveMonth) - 1],
+        desc: `Highest waves (${maxWave.toFixed(2)}m) - best time for equipment repair`,
+        color: 'bg-red-50 border-red-200 text-red-800'
+      }
+    ];
+  }, []);
+
+  const heatmapData = useMemo(() => {
+    const data = realData.hourly[selectedParam];
+    if (!data) return [];
+    
+    return MONTHS.map((month, idx) => {
+      const monthNum = idx + 1;
+      const row = { month };
+      HOURS.forEach(hour => {
+        const hourKey = parseInt(hour);
+        row[hour] = data[monthNum]?.[hourKey] || 0;
+      });
+      return row;
+    });
+  }, [selectedParam]);
+
+  const getHeatmapColor = (value, param) => {
+    if (param === 'SHC') {
+      if (value < 1.8) return '#22c55e';
+      if (value < 2.2) return '#eab308';
+      return '#ef4444';
+    } else if (param === 'WIND') {
+      if (value < 4) return '#22c55e';
+      if (value < 6) return '#eab308';
+      return '#ef4444';
+    } else if (param === 'SSRD') {
+      if (value < 70) return '#ef4444';
+      if (value < 80) return '#eab308';
+      return '#22c55e';
+    } else if (param === 'TP') {
+      if (value < 0.2) return '#22c55e';
+      if (value < 0.4) return '#eab308';
+      return '#ef4444';
+    }
+    return '#94a3b8';
+  };
+
+  const getOperationalInsight = (param) => {
+    const insights = {
+      SHC: 'Wave Height Pattern: Minimal diurnal variation. Seasonal pattern dominates - safest Dec-Mar (1.7m), highest Jul-Aug (2.4m).',
+      WIND: 'Wind Speed Pattern: Slight afternoon strengthening (15:00). Strong monsoon signal - peak Aug (7.8 m/s), calm Mar-Apr (1.3-1.9 m/s).',
+      SSRD: 'Solar Radiation Pattern: Clear diurnal cycle with peak at 15:00-18:00 (90+ W/m²). Highest Sep-Oct, lowest Jun-Jul during rainy season.',
+      TP: 'Precipitation Pattern: Slight evening/night tendency. Strong seasonal cycle - wet season Nov-Feb (440-520mm), dry season Jul-Sep (65-100mm).'
+    };
+    return insights[param] || 'Select a parameter to see operational insights.';
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+      <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold mb-2">Binuangeun Maritime Climate Analysis</h1>
+          <p className="text-blue-100">ERA5 Reanalysis Data (1980-2024) • 45 Years • 0.125° Resolution</p>
+          <div className="mt-3 flex items-center gap-4 text-sm">
+            <span className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              3-Hourly Resolution
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              8 Daily Observations
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 mt-6">
+        <div className="flex gap-2 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab('seasonal')}
+            className={`px-6 py-3 font-medium transition-colors ${
+              activeTab === 'seasonal'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Seasonal Cycle
+          </button>
+          <button
+            onClick={() => setActiveTab('heatmap')}
+            className={`px-6 py-3 font-medium transition-colors ${
+              activeTab === 'heatmap'
+                ? 'border-b-2 border-blue-600 text-blue-600'
+                : 'text-gray-600 hover:text-gray-900'
+            }`}
+          >
+            Operational Heatmap
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-6">
+        {activeTab === 'seasonal' ? (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {insights.map((insight, idx) => (
+                <div key={idx} className={`p-4 rounded-lg border-2 ${insight.color}`}>
+                  <div className="flex items-start gap-3">
+                    <insight.icon className="w-6 h-6 flex-shrink-0 mt-1" />
+                    <div>
+                      <div className="font-semibold text-sm mb-1">{insight.title}</div>
+                      <div className="text-2xl font-bold mb-1">{insight.value}</div>
+                      <div className="text-xs opacity-80">{insight.desc}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold mb-4">Monthly Averages (45-Year Climate)</h3>
+              <ResponsiveContainer width="100%" height={400}>
+                <LineChart data={seasonalChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="month" />
+                  <YAxis yAxisId="left" label={{ value: 'Wave (m) / Wind (m/s)', angle: -90, position: 'insideLeft' }} />
+                  <YAxis yAxisId="right" orientation="right" label={{ value: 'Solar (W/m²) / Rain (mm)', angle: 90, position: 'insideRight' }} />
+                  <Tooltip />
+                  <Legend />
+                  <Line yAxisId="left" type="monotone" dataKey="SHC" stroke="#3b82f6" strokeWidth={2} name="Wave Height (m)" />
+                  <Line yAxisId="left" type="monotone" dataKey="WIND" stroke="#10b981" strokeWidth={2} name="Wind Speed (m/s)" />
+                  <Line yAxisId="right" type="monotone" dataKey="SSRD" stroke="#f59e0b" strokeWidth={2} name="Solar (W/m²)" />
+                  <Line yAxisId="right" type="monotone" dataKey="TP" stroke="#06b6d4" strokeWidth={2} name="Rain (mm)" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg border border-blue-200">
+              <h3 className="text-lg font-semibold mb-3 text-gray-800">📊 Key Climate Patterns</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                <div><strong>West Monsoon (Nov-Feb):</strong> High waves (1.7m), heavy rain (445-519mm), moderate wind</div>
+                <div><strong>East Monsoon (Jun-Sep):</strong> Peak waves (2.4m), strongest winds (7.8 m/s), minimal rain (65mm)</div>
+                <div><strong>Transition (Mar-May):</strong> Calm seas (1.7-2.1m), weakest winds (1.3-4.8 m/s)</div>
+                <div><strong>Optimal Drying:</strong> Sep-Oct with solar 85+ W/m² and minimal precipitation</div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <h3 className="text-sm font-semibold mb-3 text-gray-700">Select Parameter:</h3>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(PARAMETERS).map(([key, param]) => {
+                  if (!realData.hourly[key]) return null;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setSelectedParam(key)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all ${
+                        selectedParam === key
+                          ? 'border-blue-600 bg-blue-50 text-blue-700 font-semibold'
+                          : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <param.icon className="w-4 h-4" />
+                      <span>{param.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-semibold mb-4">
+                {PARAMETERS[selectedParam].name} - Diurnal Pattern
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="border border-gray-300 bg-gray-50 p-2 text-sm font-semibold">Month</th>
+                      {HOURS.map(hour => (
+                        <th key={hour} className="border border-gray-300 bg-gray-50 p-2 text-sm font-semibold">{hour}:00</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {heatmapData.map((row, idx) => (
+                      <tr key={idx}>
+                        <td className="border border-gray-300 bg-gray-50 p-2 text-sm font-semibold">{row.month}</td>
+                        {HOURS.map(hour => {
+                          const value = row[hour];
+                          const bgColor = getHeatmapColor(value, selectedParam);
+                          return (
+                            <td 
+                              key={hour} 
+                              className="border border-gray-300 p-2 text-center text-sm font-medium"
+                              style={{ backgroundColor: bgColor, color: '#fff' }}
+                            >
+                              {value.toFixed(2)}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-4 flex items-center justify-center gap-6 text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#22c55e' }}></div>
+                  <span>Safe/Optimal</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#eab308' }}></div>
+                  <span>Moderate</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded" style={{ backgroundColor: '#ef4444' }}></div>
+                  <span>High/Risky</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-6 rounded-lg border border-blue-200">
+              <h3 className="text-lg font-semibold mb-3 text-gray-800">🔍 Operational Insights</h3>
+              <div className="text-sm text-gray-700">
+                <p>{getOperationalInsight(selectedParam)}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 pb-8">
+        <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-600">
+          <h3 className="text-lg font-semibold mb-3 text-gray-800">📚 About This Analysis</h3>
+          <div className="text-sm text-gray-600 space-y-2">
+            <p><strong>Data Source:</strong> ERA5 Reanalysis from ECMWF (European Centre for Medium-Range Weather Forecasts)</p>
+            <p><strong>Period:</strong> January 1980 - December 2024 (45 years)</p>
+            <p><strong>Resolution:</strong> 0.125° spatial, 3-hourly temporal</p>
+            <p><strong>Location:</strong> Binuangeun, Banten, Indonesia (coordinates near coastal zone)</p>
+            <p><strong>Parameters:</strong> Significant wave height (SHC), wind speed, solar radiation (SSRD), precipitation (TP), temperature</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
