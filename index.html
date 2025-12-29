@@ -11,7 +11,6 @@
         
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            /* Warna background gradient yang lebih berkelas */
             background: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
             min-height: 100vh;
         }
@@ -46,8 +45,8 @@
         
         <div id="mainMenu">
             <header class="text-center mb-16">
-                <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-md">OS2007 Pengantar Interaksi Laut dan Atmosfer </span>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Analisis Karakteristik Met-Ocean di Binuangeun (1980–2024) untuk Mendukung Keselamatan Pelayaran dan Optimalisasi Pasca-Panen Sektor Perikanan</h1>
+                <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-md">Data Analysis 2025</span>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Dashboard Analisis Maritim Binuangeun</h1>
                 <p class="text-slate-600 mt-2 text-base font-medium">Berdasarkan Data Reanalisis Meteorologi dan Oseanografi ERA5</p>
             </header>
 
@@ -67,7 +66,7 @@
                 <div onclick="bukaModul('ikan')" class="card-menu p-10 text-center shadow-sm">
                     <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto shadow-inner">🐟</div>
                     <h2 class="font-extrabold text-xl text-slate-800 mb-2">Pengeringan Ikan</h2>
-                    <p class="text-sm text-slate-500 leading-relaxed">Analisis sirkulasi Angin dan Radiasi Matahari untuk evaporasi.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Analisis korelasi Radiasi Matahari dan gangguan Curah Hujan.</p>
                 </div>
             </div>
 
@@ -96,7 +95,6 @@
                     <div class="text-center md:text-right border-t md:border-t-0 md:border-l border-slate-700 pt-6 md:pt-0 md:pl-10">
                         <p class="font-black text-lg tracking-tight">PROGRAM STUDI OSEANOGRAFI</p>
                         <p class="text-blue-400 text-sm font-bold">Institut Teknologi Bandung</p>
-                        <p class="text-slate-500 text-[10px] mt-4 uppercase tracking-widest">Ganesha 10, Bandung</p>
                     </div>
                 </div>
             </footer>
@@ -134,8 +132,9 @@
                 container.innerHTML = generateUI('Evaluasi Keselamatan Pelayaran', 'Tinggi Gelombang (m)', 'Kecepatan Angin (m/s)', 'Maret - April', 'Kondisi perairan Binuangeun paling tenang pada transisi Monsun Barat ke Timur, sangat aman untuk nelayan kecil.', 'Lakukan perawatan berkala pada mesin kapal di bulan Maret sebelum musim melaut dimulai.', 'Waspadai kenaikan gelombang signifikan di bulan Juli akibat pengaruh Monsun Timur.');
                 drawChart('Gelombang', dataMaster.gelombang, 'Angin', dataMaster.angin, '#2563eb', '#0ea5e9');
             } else {
-                container.innerHTML = generateUI('Optimalisasi Pengeringan Hasil Tangkapan', 'Radiasi Solar (W/m²)', 'Kecepatan Angin (m/s)', 'Agustus - September', 'Kombinasi angin permukaan yang kencang dan radiasi solar tinggi sangat efektif mempercepat proses evaporasi.', 'Gunakan rak penjemuran dengan sirkulasi udara yang baik agar ikan kering merata.', 'Simpan stok ikan di tempat kering sebelum bulan November untuk menghindari kelembapan tinggi.');
-                drawChart('Radiasi Solar', dataMaster.radiasi, 'Angin', dataMaster.angin, '#10b981', '#34d399');
+                // Update Logika Pengeringan Ikan: Radiasi vs Hujan
+                container.innerHTML = generateUI('Optimalisasi Pengeringan Hasil Tangkapan', 'Radiasi Solar (W/m²)', 'Curah Hujan (mm)', 'Agustus - September', 'Efisiensi pengeringan dipengaruhi oleh tingginya insolasi matahari dan minimalnya gangguan presipitasi.', 'Gunakan rak penjemuran miring ke arah datangnya cahaya matahari untuk hasil maksimal.', 'Segera pindahkan ikan ke tempat tertutup jika intensitas hujan harian mulai meningkat di sore hari.');
+                drawChart('Radiasi Solar', dataMaster.radiasi, 'Curah Hujan', dataMaster.hujan, '#10b981', '#64748b');
             }
         }
 
