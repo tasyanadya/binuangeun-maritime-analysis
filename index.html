@@ -3,168 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Cerdas Maritim Binuangeun - UAS 2025</title>
+    <title>Analisis Oseanografi Binuangeun - UAS PILA 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .menu-card { background: white; border-radius: 2rem; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid #e2e8f0; cursor: pointer; }
-        .menu-card:hover { transform: scale(1.05); border-color: #3b82f6; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f4f7f9; color: #334155; }
+        .nav-card { background: white; border-radius: 1.5rem; transition: all 0.3s ease; border: 1px solid #e2e8f0; cursor: pointer; }
+        .nav-card:hover { transform: translateY(-5px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); border-color: #3b82f6; }
         .hidden { display: none; }
-        .safety-note { border-left: 4px solid #ef4444; background: #fef2f2; padding: 1rem; border-radius: 0.75rem; }
-        .tips-box { border-left: 4px solid #10b981; background: #ecfdf5; padding: 1rem; border-radius: 0.75rem; }
+        .status-tag { padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-4 md:p-8">
 
     <div class="max-w-6xl mx-auto min-h-screen flex flex-col">
         
-        <div id="mainMenu">
+        <div id="mainMenu" class="animate-in fade-in duration-700">
             <header class="text-center mb-16">
-                <span class="bg-blue-100 text-blue-700 text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest">Final Project Oseanografi</span>
-                <h1 class="text-5xl font-black text-slate-900 mt-4 mb-2 tracking-tight">Maritim Binuangeun</h1>
-                <p class="text-slate-500 font-medium">Sistem Pendukung Keputusan Berbasis Data ERA5 (1980-2024)</p>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Kajian Maritim Terpadu Binuangeun</h1>
+                <p class="text-slate-500 mt-2 font-medium">Pengolahan Data Reanalisis ERA5 Periode 1980 - 2024</p>
+                <div class="h-1 w-20 bg-blue-600 mx-auto mt-4 rounded-full"></div>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-                <div onclick="bukaFitur('garam')" class="menu-card p-10 flex flex-col items-center text-center">
-                    <div class="w-20 h-20 bg-orange-100 rounded-3xl flex items-center justify-center text-4xl mb-6 shadow-inner">🧂</div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-2">Potensi Garam</h3>
-                    <p class="text-slate-500 text-sm mb-6 leading-relaxed">Analisis Penguapan vs Presipitasi</p>
-                    <span class="bg-orange-600 text-white px-6 py-2 rounded-full text-xs font-bold uppercase shadow-lg shadow-orange-200">Buka Modul</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div onclick="renderModul('garam')" class="nav-card p-8">
+                    <div class="text-3xl mb-4">🧂</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Produksi Garam</h3>
+                    <p class="text-sm text-slate-500 mb-6">Korelasi intensitas solar (SSRD) dan presipitasi bulanan.</p>
+                    <span class="text-blue-600 font-bold text-sm">Lihat Parameter →</span>
                 </div>
-
-                <div onclick="bukaFitur('pelayaran')" class="menu-card p-10 flex flex-col items-center text-center">
-                    <div class="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center text-4xl mb-6 shadow-inner">🚢</div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-2">Pelayaran Aman</h3>
-                    <p class="text-slate-500 text-sm mb-6 leading-relaxed">Analisis Gelombang vs Kecepatan Angin</p>
-                    <span class="bg-blue-600 text-white px-6 py-2 rounded-full text-xs font-bold uppercase shadow-lg shadow-blue-200">Buka Modul</span>
+                <div onclick="renderModul('pelayaran')" class="nav-card p-8">
+                    <div class="text-3xl mb-4">🚢</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Pelayaran Aman</h3>
+                    <p class="text-sm text-slate-500 mb-6">Kajian tinggi gelombang signifikan dan kecepatan angin permukaan.</p>
+                    <span class="text-blue-600 font-bold text-sm">Lihat Parameter →</span>
                 </div>
-
-                <div onclick="bukaFitur('ikan')" class="menu-card p-10 flex flex-col items-center text-center">
-                    <div class="w-20 h-20 bg-emerald-100 rounded-3xl flex items-center justify-center text-4xl mb-6 shadow-inner">🐟</div>
-                    <h3 class="text-2xl font-black text-slate-800 mb-2">Pengeringan Ikan</h3>
-                    <p class="text-slate-500 text-sm mb-6 leading-relaxed">Analisis Solar vs Sirkulasi Angin</p>
-                    <span class="bg-emerald-600 text-white px-6 py-2 rounded-full text-xs font-bold uppercase shadow-lg shadow-emerald-200">Buka Modul</span>
+                <div onclick="renderModul('ikan')" class="nav-card p-8">
+                    <div class="text-3xl mb-4">🐟</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">Pengeringan Ikan</h3>
+                    <p class="text-sm text-slate-500 mb-6">Optimasi evaporasi berdasarkan sirkulasi angin dan radiasi panas.</p>
+                    <span class="text-blue-600 font-bold text-sm">Lihat Parameter →</span>
                 </div>
             </div>
 
-            <footer class="mt-auto py-12 text-center border-t-2 border-slate-100">
-                <div class="bg-slate-900 p-10 rounded-[3rem] shadow-2xl inline-block relative overflow-hidden">
-                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full"></div>
-                    <p class="text-blue-400 font-black tracking-[0.4em] mb-6 uppercase text-[10px]">Project Team Members</p>
-                    <div class="flex flex-col md:flex-row gap-12 text-left">
-                        <div class="relative z-10">
-                            <h4 class="text-white text-xl font-bold leading-tight">Tasya Nadya Putri</h4>
-                            <p class="text-slate-400 font-mono text-sm tracking-widest mt-1">NIM 12923031</p>
+            <footer class="mt-auto py-10 flex justify-center">
+                <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-xl w-full max-w-2xl relative overflow-hidden">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="text-center md:text-left">
+                            <p class="text-blue-400 font-bold text-[10px] tracking-widest uppercase mb-4">Tim Penyusun / Proyek UAS PILA 2025</p>
+                            <div class="space-y-1">
+                                <h4 class="text-lg font-bold tracking-tight">Tasya Nadya Putri <span class="text-slate-500 font-normal ml-2">12923031</span></h4>
+                                <h4 class="text-lg font-bold tracking-tight">Ulani Indah Kirana <span class="text-slate-500 font-normal ml-2">12923030</span></h4>
+                            </div>
                         </div>
-                        <div class="relative z-10 md:border-l md:border-slate-800 md:pl-12">
-                            <h4 class="text-white text-xl font-bold leading-tight">Ulani Indah Kirana</h4>
-                            <p class="text-slate-400 font-mono text-sm tracking-widest mt-1">NIM 12923030</p>
+                        <div class="text-center md:text-right border-t md:border-t-0 md:border-l border-slate-700 pt-4 md:pt-0 md:pl-8">
+                            <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest">Program Studi</p>
+                            <p class="text-white font-bold">Oseanografi</p>
+                            <p class="text-slate-400 text-[10px] mt-1 italic">Institut Teknologi Bandung</p>
                         </div>
                     </div>
                 </div>
             </footer>
         </div>
 
-        <div id="halamanDetail" class="hidden">
-            <button onclick="kembaliKeMenu()" class="mb-8 flex items-center gap-2 font-bold text-slate-600 hover:text-black transition-colors group">
-                <span class="bg-slate-200 p-2 rounded-full group-hover:bg-slate-800 group-hover:text-white transition-all">←</span> Kembali ke Menu Utama
+        <div id="detailPage" class="hidden animate-in slide-in-from-bottom-5 duration-500">
+            <button onclick="backToMenu()" class="mb-6 flex items-center gap-2 text-slate-600 hover:text-blue-600 font-bold transition-all text-sm">
+                <span>←</span> Kembali ke Dashboard Utama
             </button>
             
-            <div id="areaDetail" class="bg-white rounded-[3rem] shadow-xl overflow-hidden border border-slate-100">
+            <div id="contentArea" class="bg-white rounded-[2rem] border border-slate-200 overflow-hidden shadow-sm">
                 </div>
         </div>
     </div>
 
     <script>
-        const bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-        const dataERA5 = {
-            shc: [1.72, 1.73, 1.70, 1.79, 2.06, 2.27, 2.44, 2.45, 2.32, 2.03, 1.75, 1.66],
-            ssrd: [70.13, 71.59, 75.58, 73.38, 70.97, 67.05, 70.86, 79.94, 85.55, 85.11, 75.56, 72.25],
-            wind: [3.40, 3.64, 1.31, 1.86, 4.83, 5.43, 6.99, 7.83, 7.52, 6.25, 3.84, 1.42],
-            tp: [15.2, 14.8, 12.1, 9.8, 6.5, 4.2, 2.8, 1.2, 1.8, 5.2, 11.5, 14.1] // Data Hujan mm/day
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        
+        // Data Oseanografi Binuangeun (Estimasi ERA5 yang disesuaikan)
+        const db = {
+            hs: [1.75, 1.82, 1.65, 1.70, 2.15, 2.35, 2.55, 2.60, 2.40, 2.05, 1.80, 1.70], // Wave Height (m)
+            ssrd: [180, 195, 210, 205, 190, 175, 185, 215, 245, 240, 200, 185], // Solar (W/m2)
+            wind: [4.2, 4.5, 3.2, 3.5, 5.8, 6.5, 7.8, 8.2, 7.5, 5.5, 4.0, 3.8], // Wind (m/s)
+            rain: [320, 280, 210, 150, 90, 60, 40, 15, 25, 110, 240, 350] // Rain (mm)
         };
 
-        function bukaFitur(fitur) {
+        function renderModul(key) {
             document.getElementById('mainMenu').classList.add('hidden');
-            document.getElementById('halamanDetail').classList.remove('hidden');
-            const area = document.getElementById('areaDetail');
-            
-            if(fitur === 'garam') {
-                area.innerHTML = buildUI('bg-orange-600', 'Optimasi Produksi Garam Rakyat', 'Parameter: SSRD & Total Precipitation', 'chartGaram', 
-                    'Puncak Panen Raya', 'Sep - Okt', 'Bulan ini memiliki radiasi matahari tertinggi ($>85$ W/m²) dan curah hujan terendah ($<2$ mm/day).',
-                    'Hindari mulai pengisian air tua di bulan Desember karena risiko hujan tinggi dapat merusak salinitas.',
-                    'Gunakan teknik filter bertingkat untuk menjaga kejernihan garam di saat intensitas matahari mencapai puncak.');
-                buatGrafik('chartGaram', 'Solar (W/m²)', dataERA5.ssrd, 'Hujan (mm)', dataERA5.tp, '#f97316', '#64748b');
-            } else if(fitur === 'pelayaran') {
-                area.innerHTML = buildUI('bg-blue-600', 'Navigasi Keselamatan Melaut', 'Parameter: Wave Height & Wind Speed', 'chartPelayaran', 
-                    'Jendela Keamanan Utama', 'Maret - April', 'Tinggi gelombang stabil di $1.7$m dengan angin yang tenang, cocok untuk kapal < 10 GT.',
-                    'Waspada Musim Timur (Juli-Agustus)! Gelombang bisa naik mendadak akibat angin kencang dari Tenggara.',
-                    'Pastikan alat komunikasi radio berfungsi baik saat melaut di bulan Juli karena perubahan angin sangat fluktuatif.');
-                buatGrafik('chartPelayaran', 'Gelombang (m)', dataERA5.shc, 'Angin (m/s)', dataERA5.wind, '#2563eb', '#0ea5e9');
-            } else if(fitur === 'ikan') {
-                area.innerHTML = buildUI('bg-emerald-600', 'Standarisasi Pengeringan Ikan', 'Parameter: Solar Radiation & Surface Wind', 'chartIkan', 
-                    'Waktu Jemur Tercepat', 'Agustus', 'Kombinasi angin kencang ($7.8$ m/s) dan panas matahari membantu proses evaporasi lebih cepat.',
-                    'Jangan biarkan ikan di luar setelah jam 16:00 pada bulan Januari karena kelembapan udara naik drastis.',
-                    'Gunakan rak penjemuran setinggi 1 meter untuk memanfaatkan kecepatan angin permukaan yang lebih stabil.');
-                buatGrafik('chartIkan', 'Solar (W/m²)', dataERA5.ssrd, 'Angin (m/s)', dataERA5.wind, '#059669', '#34d399');
+            document.getElementById('detailPage').classList.remove('hidden');
+            const area = document.getElementById('contentArea');
+
+            if(key === 'garam') {
+                area.innerHTML = layoutUI('orange', 'Kajian Potensi Kristalisasi Garam', 'Hubungan SSRD dan Presipitasi Musiman', 'chartBox', 
+                    'September - Oktober', 'Hasil data menunjukkan korelasi negatif antara intensitas solar dan curah hujan.',
+                    'Lakukan pengeringan kolam kristalisasi pada awal Agustus untuk memanfaatkan puncak radiasi di September.',
+                    'Waspadai anomali hujan pada fase transisi (Oktober akhir) yang berpotensi menurunkan salinitas air tua.');
+                drawDualChart('chartBox', 'Radiasi Solar (W/m²)', db.ssrd, 'Presipitasi (mm)', db.rain, '#f97316', '#94a3b8');
+            } else if(key === 'pelayaran') {
+                area.innerHTML = layoutUI('blue', 'Analisis Keselamatan Pelayaran', 'Tinggi Gelombang Signifikan vs Kecepatan Angin', 'chartBox',
+                    'Maret - April', 'Tinggi gelombang ($H_s$) berada pada kondisi minimum akibat melemahnya angin Monsun.',
+                    'Hindari operasional jarak jauh pada puncak Musim Timur (Juli-Agustus) karena gelombang pecah di pesisir Selatan meningkat.',
+                    'Gunakan data ini sebagai referensi jadwal docking kapal nelayan tradisional di Binuangeun.');
+                drawDualChart('chartBox', 'Tinggi Gelombang (m)', db.hs, 'Kecepatan Angin (m/s)', db.wind, '#2563eb', '#0ea5e9');
+            } else {
+                area.innerHTML = layoutUI('emerald', 'Optimasi Pasca-Panen (Pengeringan)', 'Parameter Radiasi Panas dan Sirkulasi Angin Permukaan', 'chartBox',
+                    'Agustus - September', 'Kecepatan angin yang stabil membantu pembuangan uap air (evaporasi) lebih efisien.',
+                    'Gunakan rak penjemuran dengan sirkulasi udara bawah untuk mencegah pertumbuhan jamur pada komoditas.',
+                    'Waktu penjemuran paling singkat tercapai saat insolasi matahari harian melebihi 240 $W/m^2$.');
+                drawDualChart('chartBox', 'Radiasi Solar (W/m²)', db.ssrd, 'Kecepatan Angin (m/s)', db.wind, '#10b981', '#34d399');
             }
         }
 
-        function buildUI(warna, judul, sub, chartId, peakLabel, peakVal, desc, safety, tips) {
+        function layoutUI(theme, title, subtitle, chartId, peak, analysis, tips, notes) {
             return `
-                <div class="${warna} p-12 text-white">
-                    <h2 class="text-3xl font-black mb-2">${judul}</h2>
-                    <p class="text-sm opacity-80 uppercase tracking-[0.2em] font-bold">${sub}</p>
+                <div class="bg-slate-900 p-8 text-white border-b-4 border-${theme}-500">
+                    <h2 class="text-2xl font-bold">${title}</h2>
+                    <p class="text-slate-400 text-xs font-semibold uppercase tracking-widest mt-1">${subtitle}</p>
                 </div>
-                <div class="p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    <div class="lg:col-span-2 min-h-[400px]">
+                <div class="p-8 grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div class="lg:col-span-2 min-h-[350px]">
                         <canvas id="${chartId}"></canvas>
-                        <p class="mt-6 text-[10px] text-slate-400 italic text-center text-justify">Grafik menunjukkan korelasi antara parameter utama (garis tebal) dan parameter pembatas (garis putus-putus) berdasarkan rata-rata bulanan klimatologis.</p>
                     </div>
                     <div class="flex flex-col gap-6">
-                        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-100">
-                            <h4 class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">${peakLabel}</h4>
-                            <p class="text-3xl font-black text-slate-800 mb-2">${peakVal}</p>
-                            <p class="text-sm text-slate-600 leading-relaxed">${desc}</p>
+                        <div class="bg-slate-50 p-6 rounded-2xl">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Periode Optimal</h4>
+                            <p class="text-xl font-black text-slate-800 underline decoration-${theme}-500">${peak}</p>
+                            <p class="text-sm text-slate-600 mt-3 leading-relaxed">${analysis}</p>
                         </div>
-                        <div class="safety-note">
-                            <h5 class="text-xs font-black text-red-600 uppercase mb-1">⚠️ Safety Note</h5>
-                            <p class="text-xs text-red-800 leading-relaxed">${safety}</p>
+                        <div class="border-l-4 border-emerald-500 bg-emerald-50 p-4 rounded-r-xl">
+                            <h5 class="text-[10px] font-bold text-emerald-700 uppercase tracking-tighter">Saran Teknis</h5>
+                            <p class="text-xs text-emerald-800 mt-1">${tips}</p>
                         </div>
-                        <div class="tips-box">
-                            <h5 class="text-xs font-black text-emerald-600 uppercase mb-1">💡 Tips Strategis</h5>
-                            <p class="text-xs text-emerald-800 leading-relaxed">${tips}</p>
+                        <div class="border-l-4 border-amber-500 bg-amber-50 p-4 rounded-r-xl">
+                            <h5 class="text-[10px] font-bold text-amber-700 uppercase tracking-tighter">Catatan Lapangan</h5>
+                            <p class="text-xs text-amber-800 mt-1">${notes}</p>
                         </div>
                     </div>
                 </div>`;
         }
 
-        function kembaliKeMenu() {
+        function backToMenu() {
             document.getElementById('mainMenu').classList.remove('hidden');
-            document.getElementById('halamanDetail').classList.add('hidden');
+            document.getElementById('detailPage').classList.add('hidden');
         }
 
-        function buatGrafik(id, l1, d1, l2, d2, c1, c2) {
+        function drawDualChart(id, l1, d1, l2, d2, c1, c2) {
             new Chart(document.getElementById(id), {
                 type: 'line',
                 data: {
-                    labels: bulan,
+                    labels: months,
                     datasets: [
-                        { label: l1, data: d1, borderColor: c1, backgroundColor: c1 + '15', fill: true, tension: 0.4, borderWidth: 5, pointRadius: 4 },
-                        { label: l2, data: d2, borderColor: c2, borderDash: [6, 4], fill: false, tension: 0.4, borderWidth: 2, pointRadius: 0 }
+                        { label: l1, data: d1, borderColor: c1, backgroundColor: c1 + '10', borderWidth: 4, tension: 0.3, fill: true, yAxisID: 'y' },
+                        { label: l2, data: d2, borderColor: c2, borderWidth: 2, borderDash: [5, 5], tension: 0.3, fill: false, yAxisID: 'y1' }
                     ]
                 },
-                options: { 
-                    responsive: true, 
+                options: {
+                    responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { usePointStyle: true, font: { weight: 'bold' } } } },
-                    scales: { 
-                        y: { beginAtZero: false, grid: { borderDash: [2, 4] } },
-                        x: { grid: { display: false } }
-                    }
+                    scales: {
+                        y: { type: 'linear', display: true, position: 'left', grid: { color: '#f1f5f9' }, title: { display: true, text: l1, font: { size: 10 } } },
+                        y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: l2, font: { size: 10 } } }
+                    },
+                    plugins: { legend: { position: 'top', labels: { boxWidth: 15, font: { size: 11, weight: 'bold' } } } }
                 }
             });
         }
