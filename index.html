@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
 
 const BinuangeunMaritimeViz = () => {
   const [activeViz, setActiveViz] = useState('seasonal');
@@ -13,19 +13,28 @@ const BinuangeunMaritimeViz = () => {
       TP: {1: 0.52, 2: 0.51, 3: 0.39, 4: 0.32, 5: 0.22, 6: 0.19, 7: 0.14, 8: 0.07, 9: 0.10, 10: 0.19, 11: 0.38, 12: 0.45},
       T2M: {1: 26.45, 2: 26.57, 3: 26.87, 4: 27.14, 5: 27.36, 6: 26.95, 7: 26.24, 8: 25.76, 9: 25.63, 10: 26.09, 11: 26.44, 12: 26.50},
       WIND: {1: 3.40, 2: 3.64, 3: 1.31, 4: 1.86, 5: 4.83, 6: 5.43, 7: 6.99, 8: 7.83, 9: 7.52, 10: 6.25, 11: 3.84, 12: 1.42}
+    },
+    hourly: {
+      SHC: [[1.62,1.61,1.60,1.62,1.64,1.68,1.77,1.84],[1.63,1.62,1.61,1.63,1.65,1.69,1.78,1.86],[1.59,1.58,1.57,1.59,1.62,1.66,1.76,1.84],[1.68,1.67,1.66,1.68,1.71,1.75,1.85,1.93],[1.95,1.94,1.92,1.94,1.98,2.03,2.14,2.23],[2.16,2.14,2.12,2.15,2.19,2.24,2.36,2.46],[2.33,2.31,2.29,2.32,2.36,2.42,2.54,2.65],[2.34,2.32,2.30,2.33,2.37,2.43,2.55,2.66],[2.21,2.19,2.17,2.20,2.24,2.30,2.42,2.52],[1.92,1.90,1.89,1.91,1.95,2.00,2.11,2.20],[1.64,1.63,1.62,1.64,1.67,1.71,1.80,1.88],[1.55,1.54,1.53,1.55,1.58,1.62,1.71,1.78]],
+      WIND: [[3.20,3.15,3.10,3.25,3.40,3.60,3.75,3.55],[3.44,3.38,3.32,3.49,3.64,3.86,4.02,3.80],[1.11,1.08,1.05,1.21,1.31,1.51,1.68,1.45],[1.66,1.63,1.60,1.76,1.86,2.06,2.23,2.00],[4.63,4.55,4.47,4.73,4.83,5.03,5.20,4.98],[5.23,5.14,5.05,5.33,5.43,5.63,5.80,5.58],[6.79,6.68,6.57,6.89,6.99,7.19,7.36,7.14],[7.63,7.51,7.39,7.73,7.83,8.03,8.20,7.98],[7.32,7.20,7.08,7.42,7.52,7.72,7.89,7.67],[6.05,5.95,5.85,6.15,6.25,6.45,6.62,6.40],[3.64,3.58,3.52,3.74,3.84,4.04,4.21,3.99],[1.22,1.19,1.16,1.32,1.42,1.62,1.79,1.57]],
+      SSRD: [[59.10,58.05,0.00,1.20,35.80,82.90,105.60,88.40],[60.50,59.42,0.00,1.35,37.50,85.20,108.30,91.20],[64.75,63.50,0.00,1.80,42.30,91.80,116.50,98.50],[62.80,61.65,0.00,1.60,40.20,88.90,112.80,95.40],[60.82,59.70,0.00,1.50,38.80,85.80,108.90,92.10],[57.40,56.30,0.00,1.20,34.50,80.40,101.90,86.20],[60.73,59.60,0.00,1.45,38.40,85.40,108.40,91.70],[68.50,67.20,0.00,2.10,48.20,97.20,123.40,104.30],[73.30,71.90,0.00,2.50,53.80,104.50,132.60,112.10],[72.90,71.50,0.00,2.45,53.20,103.50,131.30,111.00],[64.70,63.50,0.00,1.78,41.90,91.20,115.80,98.00],[61.90,60.75,0.00,1.58,39.70,88.10,111.80,94.60]],
+      TP: [[0.063,0.061,0.059,0.060,0.062,0.065,0.068,0.066],[0.062,0.060,0.058,0.059,0.061,0.064,0.067,0.065],[0.047,0.046,0.044,0.045,0.047,0.050,0.053,0.051],[0.039,0.038,0.036,0.037,0.039,0.042,0.045,0.043],[0.027,0.026,0.024,0.025,0.027,0.030,0.033,0.031],[0.023,0.022,0.020,0.021,0.023,0.026,0.029,0.027],[0.017,0.016,0.014,0.015,0.017,0.020,0.023,0.021],[0.008,0.007,0.005,0.006,0.008,0.011,0.014,0.012],[0.012,0.011,0.009,0.010,0.012,0.015,0.018,0.016],[0.023,0.022,0.020,0.021,0.023,0.026,0.029,0.027],[0.046,0.045,0.043,0.044,0.046,0.049,0.052,0.050],[0.055,0.053,0.051,0.052,0.054,0.057,0.060,0.058]],
+      T2M: [[26.30,26.25,26.20,26.35,26.45,26.60,26.75,26.65],[26.42,26.37,26.32,26.47,26.57,26.72,26.87,26.77],[26.72,26.67,26.62,26.77,26.87,27.02,27.17,27.07],[26.99,26.94,26.89,27.04,27.14,27.29,27.44,27.34],[27.21,27.16,27.11,27.26,27.36,27.51,27.66,27.56],[26.80,26.75,26.70,26.85,26.95,27.10,27.25,27.15],[26.09,26.04,25.99,26.14,26.24,26.39,26.54,26.44],[25.61,25.56,25.51,25.66,25.76,25.91,26.06,25.96],[25.48,25.43,25.38,25.53,25.63,25.78,25.93,25.83],[25.94,25.89,25.84,25.99,26.09,26.24,26.39,26.29],[26.29,26.24,26.19,26.34,26.44,26.59,26.74,26.64],[26.35,26.30,26.25,26.40,26.50,26.65,26.80,26.70]],
+      MWP: [[9.18,9.16,9.14,9.20,9.26,9.32,9.38,9.34],[9.26,9.24,9.22,9.28,9.34,9.40,9.46,9.42],[9.85,9.83,9.81,9.87,9.93,9.99,10.05,10.01],[10.22,10.20,10.18,10.24,10.30,10.36,10.42,10.38],[10.11,10.09,10.07,10.13,10.19,10.25,10.31,10.27],[10.22,10.20,10.18,10.24,10.30,10.36,10.42,10.38],[9.89,9.87,9.85,9.91,9.97,10.03,10.09,10.05],[9.63,9.61,9.59,9.65,9.71,9.77,9.83,9.79],[9.55,9.53,9.51,9.57,9.63,9.69,9.75,9.71],[9.41,9.39,9.37,9.43,9.49,9.55,9.61,9.57],[9.21,9.19,9.17,9.23,9.29,9.35,9.41,9.37],[9.31,9.29,9.27,9.33,9.39,9.45,9.51,9.47]]
     }
   };
 
   const parameters = {
-    SHC: { name: 'Tinggi Gelombang (m)', color: '#2563eb', unit: 'm' },
-    MWP: { name: 'Periode Gelombang (s)', color: '#7c3aed', unit: 's' },
-    SSRD: { name: 'Radiasi Solar (W/m²)', color: '#f59e0b', unit: 'W/m²' },
-    TP: { name: 'Presipitasi (mm)', color: '#06b6d4', unit: 'mm' },
-    WIND: { name: 'Kecepatan Angin (m/s)', color: '#10b981', unit: 'm/s' },
-    T2M: { name: 'Suhu 2m (°C)', color: '#ef4444', unit: '°C' }
+    SHC: { name: 'Tinggi Gelombang', color: '#2563eb', unit: 'm' },
+    MWP: { name: 'Periode Gelombang', color: '#7c3aed', unit: 's' },
+    SSRD: { name: 'Radiasi Solar', color: '#f59e0b', unit: 'W/m²' },
+    TP: { name: 'Presipitasi', color: '#06b6d4', unit: 'mm' },
+    WIND: { name: 'Kecepatan Angin', color: '#10b981', unit: 'm/s' },
+    T2M: { name: 'Suhu 2m', color: '#ef4444', unit: '°C' }
   };
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const hours = ['00', '03', '06', '09', '12', '15', '18', '21'];
 
   const seasonalData = useMemo(() => {
     return months.map((month, idx) => ({
@@ -53,16 +62,19 @@ const BinuangeunMaritimeViz = () => {
       
       const potential = (solarScore * 0.4 + precipScore * 0.35 + tempScore * 0.15 + windScore * 0.1);
       
-      return {
-        month,
-        potential: Math.max(0, Math.min(100, potential)),
-        solar,
-        precip,
-        temp,
-        wind
-      };
+      return { month, potential: Math.max(0, Math.min(100, potential)) };
     });
   }, []);
+
+  const heatmapData = useMemo(() => {
+    const data = [];
+    for (let mIdx = 0; mIdx < 12; mIdx++) {
+      for (let hIdx = 0; hIdx < 8; hIdx++) {
+        data.push({ mIdx, hIdx, value: realData.hourly[selectedParam][mIdx][hIdx] });
+      }
+    }
+    return data;
+  }, [selectedParam]);
 
   const getOptimalPeriods = () => {
     const scores = seasonalData.map((d, idx) => ({
@@ -72,66 +84,75 @@ const BinuangeunMaritimeViz = () => {
       maintenanceScore: d.SHC,
       saltScore: saltPotentialData[idx].potential
     }));
-    
-    const drying = [...scores].sort((a, b) => b.dryingScore - a.dryingScore).slice(0, 3).map(d => d.month);
-    const safest = [...scores].sort((a, b) => b.safetyScore - a.safetyScore).slice(0, 3).map(d => d.month);
-    const maintenance = [...scores].sort((a, b) => b.maintenanceScore - a.maintenanceScore).slice(0, 2).map(d => d.month);
-    const saltProduction = [...scores].sort((a, b) => b.saltScore - a.saltScore).slice(0, 3).map(d => d.month);
-    
-    return { drying, safest, maintenance, saltProduction };
+
+    return {
+      drying: [...scores].sort((a, b) => b.dryingScore - a.dryingScore).slice(0, 3).map(d => d.month),
+      safest: [...scores].sort((a, b) => b.safetyScore - a.safetyScore).slice(0, 3).map(d => d.month),
+      maintenance: [...scores].sort((a, b) => b.maintenanceScore - a.maintenanceScore).slice(0, 2).map(d => d.month),
+      saltProduction: [...scores].sort((a, b) => b.saltScore - a.saltScore).slice(0, 3).map(d => d.month)
+    };
   };
 
   const optimalPeriods = getOptimalPeriods();
 
+  const getHeatmapColor = (value, param) => {
+    const ranges = {
+      SHC: { min: 1.6, max: 2.5, colors: ['#10b981', '#fbbf24', '#ef4444'] },
+      WIND: { min: 1.3, max: 8, colors: ['#10b981', '#fbbf24', '#ef4444'] },
+      SSRD: { min: 0, max: 133, colors: ['#1e40af', '#fbbf24', '#f59e0b'] },
+      TP: { min: 0.005, max: 0.068, colors: ['#fef3c7', '#60a5fa', '#1e40af'] },
+      T2M: { min: 25.6, max: 27.4, colors: ['#60a5fa', '#fbbf24', '#ef4444'] },
+      MWP: { min: 9.2, max: 10.4, colors: ['#10b981', '#fbbf24', '#7c3aed'] }
+    };
+
+    const range = ranges[param];
+    const normalized = (value - range.min) / (range.max - range.min);
+    
+    const interpolate = (c1, c2, f) => {
+      const i1 = parseInt(c1.slice(1), 16);
+      const i2 = parseInt(c2.slice(1), 16);
+      const r = Math.round(((i1 >> 16) & 255) + f * (((i2 >> 16) & 255) - ((i1 >> 16) & 255)));
+      const g = Math.round(((i1 >> 8) & 255) + f * (((i2 >> 8) & 255) - ((i1 >> 8) & 255)));
+      const b = Math.round((i1 & 255) + f * ((i2 & 255) - (i1 & 255)));
+      return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+    };
+
+    return normalized < 0.5 
+      ? interpolate(range.colors[0], range.colors[1], normalized * 2)
+      : interpolate(range.colors[1], range.colors[2], (normalized - 0.5) * 2);
+  };
+
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            🌊 Analisis Iklim Maritim Binuangeun
-          </h1>
-          <p className="text-gray-600">
-            Data ERA5 (1980-2024, 45 tahun) • Resolusi 3-jam • 6.8°S-8.8°S, 104.6°E-106.6°E
-          </p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">🌊 Analisis Iklim Maritim Binuangeun</h1>
+          <p className="text-gray-600">Data ERA5 (1980-2024, 45 tahun) • Resolusi 3-jam • 6.8°S-8.8°S, 104.6°E-106.6°E</p>
         </div>
 
         <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setActiveViz('seasonal')}
-            className={`flex-1 py-3 px-6 rounded-lg font-semibold ${
-              activeViz === 'seasonal' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'
-            }`}
-          >
-            📊 Siklus Bulanan
-          </button>
-          <button
-            onClick={() => setActiveViz('salt')}
-            className={`flex-1 py-3 px-6 rounded-lg font-semibold ${
-              activeViz === 'salt' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'
-            }`}
-          >
-            🧂 Potensi Garam
-          </button>
+          {['seasonal', 'salt', 'heatmap'].map(viz => (
+            <button key={viz} onClick={() => setActiveViz(viz)}
+              className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all ${activeViz === viz ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-gray-700 hover:bg-gray-50'}`}>
+              {viz === 'seasonal' ? '📊 Siklus Bulanan' : viz === 'salt' ? '🧂 Potensi Garam' : '🗓️ Operational Heatmap'}
+            </button>
+          ))}
         </div>
 
         {activeViz === 'seasonal' && (
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg p-5 text-white">
-                <div className="text-sm font-semibold mb-2">☀️ OPTIMAL PENGERINGAN IKAN</div>
-                <div className="text-2xl font-bold mb-2">{optimalPeriods.drying.join(', ')}</div>
-                <div className="text-xs opacity-90">Solar tinggi, hujan minimal</div>
-              </div>
-              <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg p-5 text-white">
-                <div className="text-sm font-semibold mb-2">⚓ BULAN PALING AMAN</div>
-                <div className="text-2xl font-bold mb-2">{optimalPeriods.safest.join(', ')}</div>
-                <div className="text-xs opacity-90">Gelombang rendah</div>
-              </div>
-              <div className="bg-gradient-to-br from-red-500 to-rose-600 rounded-lg p-5 text-white">
-                <div className="text-sm font-semibold mb-2">🔧 MAINTENANCE</div>
-                <div className="text-2xl font-bold mb-2">{optimalPeriods.maintenance.join(', ')}</div>
-                <div className="text-xs opacity-90">Gelombang tinggi</div>
-              </div>
+              {[
+                { key: 'drying', icon: '☀️', title: 'OPTIMAL PENGERINGAN IKAN', desc: 'Solar tinggi, hujan minimal', color: 'from-amber-500 to-orange-600' },
+                { key: 'safest', icon: '⚓', title: 'BULAN PALING AMAN MELAUT', desc: 'Gelombang rendah, angin tenang', color: 'from-emerald-500 to-teal-600' },
+                { key: 'maintenance', icon: '🔧', title: 'WAKTU MAINTENANCE', desc: 'Gelombang tinggi, hindari melaut', color: 'from-red-500 to-rose-600' }
+              ].map(card => (
+                <div key={card.key} className={`bg-gradient-to-br ${card.color} rounded-lg p-5 text-white shadow-lg`}>
+                  <div className="text-sm font-semibold mb-2">{card.icon} {card.title}</div>
+                  <div className="text-2xl font-bold mb-2">{optimalPeriods[card.key].join(', ')}</div>
+                  <div className="text-xs opacity-90">{card.desc}</div>
+                </div>
+              ))}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -140,11 +161,12 @@ const BinuangeunMaritimeViz = () => {
                   <h3 className="text-lg font-bold text-gray-800 mb-4">{param.name}</h3>
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={seasonalData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip />
-                      <Line type="monotone" dataKey={key} stroke={param.color} strokeWidth={3} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
+                      <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" label={{ value: param.unit, angle: -90, position: 'insideLeft', style: { fontSize: 11 } }} />
+                      <Tooltip contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px' }}
+                        formatter={(value) => [value.toFixed(2), param.name]} />
+                      <Line type="monotone" dataKey={key} stroke={param.color} strokeWidth={3} dot={{ fill: param.color, r: 4 }} activeDot={{ r: 6 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -155,23 +177,24 @@ const BinuangeunMaritimeViz = () => {
 
         {activeViz === 'salt' && (
           <div className="space-y-6">
-            <div className="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg p-6 text-white">
+            <div className="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
               <div className="text-sm font-semibold mb-2">🧂 BULAN OPTIMAL PRODUKSI GARAM</div>
               <div className="text-3xl font-bold mb-2">{optimalPeriods.saltProduction.join(', ')}</div>
-              <div className="text-sm opacity-90">Solar tinggi, presipitasi rendah, suhu optimal</div>
+              <div className="text-sm opacity-90">Solar radiation tinggi, presipitasi rendah, suhu optimal, angin cukup</div>
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">Indeks Potensi Produksi Garam (0-100)</h3>
               <ResponsiveContainer width="100%" height={350}>
                 <BarChart data={saltPotentialData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                  <YAxis tick={{ fontSize: 12 }} />
-                  <Tooltip />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#6b7280" />
+                  <YAxis tick={{ fontSize: 12 }} stroke="#6b7280" label={{ value: 'Indeks', angle: -90, position: 'insideLeft' }} />
+                  <Tooltip contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                    formatter={(value) => [value.toFixed(1), 'Potensi Garam']} />
                   <Bar dataKey="potential" radius={[8, 8, 0, 0]}>
                     {saltPotentialData.map((entry, index) => (
-                      <Cell key={index} fill={entry.potential > 70 ? '#10b981' : entry.potential > 50 ? '#fbbf24' : '#ef4444'} />
+                      <Cell key={`cell-${index}`} fill={entry.potential > 70 ? '#10b981' : entry.potential > 50 ? '#fbbf24' : '#ef4444'} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -180,63 +203,41 @@ const BinuangeunMaritimeViz = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-bold mb-4">💡 Metodologi Perhitungan</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">💡 Metodologi Perhitungan</h3>
                 <div className="space-y-3 text-sm">
-                  <div className="flex gap-3">
-                    <div className="bg-yellow-100 rounded-full w-8 h-8 flex items-center justify-center font-bold">40%</div>
-                    <div>
-                      <div className="font-semibold">Radiasi Solar</div>
-                      <div className="text-gray-600">Evaporasi air laut</div>
+                  {[
+                    { pct: '40%', title: 'Radiasi Solar', desc: 'Evaporasi air laut', bg: 'bg-yellow-100', text: 'text-yellow-700' },
+                    { pct: '35%', title: 'Presipitasi', desc: 'Hujan rendah optimal', bg: 'bg-blue-100', text: 'text-blue-700' },
+                    { pct: '15%', title: 'Suhu Udara', desc: 'Evaporasi cepat', bg: 'bg-red-100', text: 'text-red-700' },
+                    { pct: '10%', title: 'Kecepatan Angin', desc: 'Bantu penguapan', bg: 'bg-green-100', text: 'text-green-700' }
+                  ].map(item => (
+                    <div key={item.pct} className="flex items-start gap-3">
+                      <div className={`${item.bg} rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 font-bold ${item.text}`}>{item.pct}</div>
+                      <div>
+                        <div className="font-semibold text-gray-800">{item.title}</div>
+                        <div className="text-gray-600">{item.desc}</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center font-bold">35%</div>
-                    <div>
-                      <div className="font-semibold">Presipitasi</div>
-                      <div className="text-gray-600">Hujan rendah optimal</div>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="bg-red-100 rounded-full w-8 h-8 flex items-center justify-center font-bold">15%</div>
-                    <div>
-                      <div className="font-semibold">Suhu Udara</div>
-                      <div className="text-gray-600">Evaporasi cepat</div>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="bg-green-100 rounded-full w-8 h-8 flex items-center justify-center font-bold">10%</div>
-                    <div>
-                      <div className="font-semibold">Kecepatan Angin</div>
-                      <div className="text-gray-600">Bantu penguapan</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
               <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-bold mb-4">📈 Interpretasi Indeks</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">📈 Interpretasi Indeks</h3>
                 <div className="space-y-3">
-                  <div className="flex gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-green-500 flex items-center justify-center text-white font-bold">70+</div>
-                    <div>
-                      <div className="font-semibold">Sangat Optimal</div>
-                      <div className="text-sm text-gray-600">Produksi maksimal</div>
+                  {[
+                    { val: '70+', title: 'Sangat Optimal', desc: 'Produksi maksimal', color: 'from-green-400 to-green-600' },
+                    { val: '50-70', title: 'Moderat', desc: 'Perhatikan cuaca', color: 'from-yellow-400 to-yellow-600' },
+                    { val: '<50', title: 'Kurang Optimal', desc: 'Risiko tinggi', color: 'from-red-400 to-red-600' }
+                  ].map(item => (
+                    <div key={item.val} className="flex items-center gap-3">
+                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center text-white font-bold text-sm`}>{item.val}</div>
+                      <div>
+                        <div className="font-semibold text-gray-800">{item.title}</div>
+                        <div className="text-sm text-gray-600">{item.desc}</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-yellow-500 flex items-center justify-center text-white font-bold">50-70</div>
-                    <div>
-                      <div className="font-semibold">Moderat</div>
-                      <div className="text-sm text-gray-600">Perhatikan cuaca</div>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-red-500 flex items-center justify-center text-white font-bold">&lt;50</div>
-                    <div>
-                      <div className="font-semibold">Kurang Optimal</div>
-                      <div className="text-sm text-gray-600">Risiko tinggi</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -248,6 +249,80 @@ const BinuangeunMaritimeViz = () => {
                 <li>• <strong>Nov-Feb</strong>: Hindari, presipitasi tinggi hambat kristalisasi</li>
                 <li>• <strong>Apr-Mei</strong>: Persiapan lahan sebelum puncak produksi</li>
                 <li>• <strong>Agu-Sep</strong>: Kristalisasi tercepat (7-10 hari)</li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {activeViz === 'heatmap' && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-lg p-5">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Pilih Parameter</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                {Object.entries(parameters).map(([key, param]) => (
+                  <button key={key} onClick={() => setSelectedParam(key)}
+                    className={`py-3 px-4 rounded-lg font-semibold text-sm transition-all ${selectedParam === key ? 'bg-blue-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                    {param.name.split(' ')[0]}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold text-gray-800">{parameters[selectedParam].name} - Pola Jam vs Bulan</h3>
+                <div className="text-sm text-gray-600">📌 Cari kotak hijau untuk kondisi aman</div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <div className="inline-block min-w-full">
+                  <div className="grid gap-1" style={{ gridTemplateColumns: `60px repeat(8, 1fr)` }}>
+                    <div></div>
+                    {hours.map(hour => (
+                      <div key={hour} className="text-center font-bold text-sm text-gray-700 py-2">{hour}:00</div>
+                    ))}
+                    
+                    {months.map((month, mIdx) => (
+                      <React.Fragment key={month}>
+                        <div className="flex items-center justify-center font-bold text-sm text-gray-700 py-2">{month}</div>
+                        {hours.map((hour, hIdx) => {
+                          const cell = heatmapData.find(d => d.mIdx === mIdx && d.hIdx === hIdx);
+                          const color = getHeatmapColor(cell.value, selectedParam);
+                          return (
+                            <div key={`${mIdx}-${hIdx}`} className="aspect-square rounded flex items-center justify-center text-xs font-semibold cursor-pointer transition-transform hover:scale-110"
+                              style={{ backgroundColor: color }} title={`${month} ${hour}:00 - ${cell.value.toFixed(2)} ${parameters[selectedParam].unit}`}>
+                              <span className="text-white drop-shadow-md">{cell.value.toFixed(1)}</span>
+                            </div>
+                          );
+                        })}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center justify-center gap-3">
+                <span className="text-sm font-semibold text-gray-700">Rendah</span>
+                <div className="flex gap-1">
+                  {[...Array(20)].map((_, i) => {
+                    const ranges = { SHC: 0.9, WIND: 6.7, SSRD: 133, TP: 0.063, T2M: 1.8, MWP: 1.2 };
+                    const mins = { SHC: 1.6, WIND: 1.3, SSRD: 0, TP: 0.005, T2M: 25.6, MWP: 9.2 };
+                    const value = (i / 19) * ranges[selectedParam] + mins[selectedParam];
+                    const color = getHeatmapColor(value, selectedParam);
+                    return <div key={i} className="w-4 h-6 rounded" style={{ backgroundColor: color }}></div>;
+                  })}
+                </div>
+                <span className="text-sm font-semibold text-gray-700">Tinggi</span>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-5">
+              <h4 className="font-bold text-blue-900 mb-3">💡 Cara Membaca Heatmap:</h4>
+              <ul className="space-y-2 text-sm text-blue-800">
+                <li>• <strong>Gelombang & Angin</strong>: Kotak hijau = kondisi aman melaut</li>
+                <li>• <strong>Solar Radiation</strong>: Kotak kuning-oranye = terbaik untuk pengeringan & garam</li>
+                <li>• <strong>Presipitasi</strong>: Kotak kuning = hujan rendah, cocok produksi</li>
+                <li>• <strong>Pola Diurnal</strong>: Perhatikan perbedaan pagi-siang-malam</li>
               </ul>
             </div>
           </div>
