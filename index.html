@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi Maritim Binuangeun - UAS 2025</title>
+    <title>Sistem Informasi Maritim Binuangeun - UAS PILA 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -45,8 +45,8 @@
         
         <div id="mainMenu">
             <header class="text-center mb-16">
-                <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-md">Data Analysis 2025</span>
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Dashboard Analisis Maritim Binuangeun</h1>
+                <span class="bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block shadow-md">OS2007 Pengantar Interaksi Laut dan Atmosfer </span>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Analisis Parameter Met-Ocean Binuangeun untuk Optimalisasi Pengeringan Ikan, Keselamatan Pelayaran, dan Potensi Garam</h1>
                 <p class="text-slate-600 mt-2 text-base font-medium">Berdasarkan Data Reanalisis Meteorologi dan Oseanografi ERA5</p>
             </header>
 
@@ -54,19 +54,19 @@
                 <div onclick="bukaModul('garam')" class="card-menu p-10 text-center shadow-sm">
                     <div class="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto shadow-inner">🧂</div>
                     <h2 class="font-extrabold text-xl text-slate-800 mb-2">Potensi Garam</h2>
-                    <p class="text-sm text-slate-500 leading-relaxed">Analisis korelasi Radiasi Matahari dan Curah Hujan.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Analisis Korelasi Radiasi Matahari dan Curah Hujan.</p>
                 </div>
 
                 <div onclick="bukaModul('pelayaran')" class="card-menu p-10 text-center shadow-sm">
                     <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto shadow-inner">🚢</div>
                     <h2 class="font-extrabold text-xl text-slate-800 mb-2">Keselamatan Pelayaran</h2>
-                    <p class="text-sm text-slate-500 leading-relaxed">Analisis Tinggi Gelombang dan Kecepatan Angin permukaan.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Analisis Tinggi Gelombang dan Kecepatan Angin.</p>
                 </div>
 
                 <div onclick="bukaModul('ikan')" class="card-menu p-10 text-center shadow-sm">
                     <div class="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mb-6 mx-auto shadow-inner">🐟</div>
                     <h2 class="font-extrabold text-xl text-slate-800 mb-2">Pengeringan Ikan</h2>
-                    <p class="text-sm text-slate-500 leading-relaxed">Analisis korelasi Radiasi Matahari dan Curah Hujan.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed">Analisis Korelasi Radiasi Matahari dan Curah Hujan.</p>
                 </div>
             </div>
 
@@ -93,8 +93,9 @@
                         </div>
                     </div>
                     <div class="text-center md:text-right border-t md:border-t-0 md:border-l border-slate-700 pt-6 md:pt-0 md:pl-10">
-                        <p class="font-black text-lg tracking-tight">PROGRAM STUDI OSEANOGRAFI</p>
+                        <p class="font-black text-lg tracking-tight uppercase">Program Studi Oseanografi</p>
                         <p class="text-blue-400 text-sm font-bold">Institut Teknologi Bandung</p>
+                        <p class="text-slate-500 text-[10px] mt-4 uppercase tracking-widest">Ganesha 10, Bandung</p>
                     </div>
                 </div>
             </footer>
@@ -104,9 +105,7 @@
             <button onclick="kembali()" class="mb-8 font-bold text-slate-600 hover:text-blue-600 flex items-center gap-2 transition-all">
                 <span class="bg-white p-2 rounded-full shadow-sm text-sm">←</span> Kembali ke Dashboard Utama
             </button>
-            
-            <div id="konten" class="bg-white rounded-[2.5rem] shadow-xl border border-slate-200 overflow-hidden">
-                </div>
+            <div id="konten" class="bg-white rounded-[2.5rem] shadow-xl border border-slate-200 overflow-hidden"></div>
         </div>
     </div>
 
@@ -126,14 +125,14 @@
             const container = document.getElementById('konten');
 
             if(opsi === 'garam') {
-                container.innerHTML = generateUI('Analisis Potensi Produksi Garam', 'Radiasi Solar (W/m²)', 'Curah Hujan (mm)', 'Sep - Okt', 'Bulan September menunjukkan potensi tertinggi untuk kristalisasi garam akibat rendahnya tutupan awan dan presipitasi.', 'Pastikan kolam penampungan air tua sudah siap sebelum memasuki bulan Agustus.', 'Lakukan pemantauan harian terhadap fluktuasi hujan mendadak di bulan Oktober.');
+                container.innerHTML = generateUI('Analisis Potensi Produksi Garam', 'Radiasi Matahari (W/m²)', 'Curah Hujan (mm)', 'Sep - Okt', 'Bulan September menunjukkan potensi tertinggi untuk kristalisasi garam akibat rendahnya tutupan awan dan presipitasi.', 'Pastikan kolam penampungan air tua sudah siap sebelum memasuki bulan Agustus.', 'Lakukan pemantauan harian terhadap fluktuasi hujan mendadak di bulan Oktober.');
                 drawChart('Radiasi Solar', dataMaster.radiasi, 'Curah Hujan', dataMaster.hujan, '#f97316', '#64748b');
             } else if(opsi === 'pelayaran') {
                 container.innerHTML = generateUI('Evaluasi Keselamatan Pelayaran', 'Tinggi Gelombang (m)', 'Kecepatan Angin (m/s)', 'Maret - April', 'Kondisi perairan Binuangeun paling tenang pada transisi Monsun Barat ke Timur, sangat aman untuk nelayan kecil.', 'Lakukan perawatan berkala pada mesin kapal di bulan Maret sebelum musim melaut dimulai.', 'Waspadai kenaikan gelombang signifikan di bulan Juli akibat pengaruh Monsun Timur.');
                 drawChart('Gelombang', dataMaster.gelombang, 'Angin', dataMaster.angin, '#2563eb', '#0ea5e9');
             } else {
-                // Update Logika Pengeringan Ikan: Radiasi vs Hujan
-                container.innerHTML = generateUI('Optimalisasi Pengeringan Hasil Tangkapan', 'Radiasi Solar (W/m²)', 'Curah Hujan (mm)', 'Agustus - September', 'Efisiensi pengeringan dipengaruhi oleh tingginya insolasi matahari dan minimalnya gangguan presipitasi.', 'Gunakan rak penjemuran miring ke arah datangnya cahaya matahari untuk hasil maksimal.', 'Segera pindahkan ikan ke tempat tertutup jika intensitas hujan harian mulai meningkat di sore hari.');
+                // PARAMETER DIUBAH KE RADIASI DAN HUJAN
+                container.innerHTML = generateUI('Optimalisasi Pengeringan Hasil Tangkapan', 'Radiasi Matahari (W/m²)', 'Curah Hujan (mm)', 'Agustus - September', 'Efisiensi pengeringan dipengaruhi oleh tingginya insolasi matahari dan minimalnya gangguan presipitasi.', 'Gunakan rak penjemuran miring ke arah datangnya cahaya matahari untuk hasil maksimal.', 'Segera pindahkan ikan ke tempat tertutup jika intensitas hujan harian mulai meningkat di sore hari.');
                 drawChart('Radiasi Solar', dataMaster.radiasi, 'Curah Hujan', dataMaster.hujan, '#10b981', '#64748b');
             }
         }
