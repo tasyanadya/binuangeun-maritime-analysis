@@ -9,79 +9,83 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
-        .section-card { background: white; border-radius: 2rem; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 2.5rem; }
-        .feature-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; }
+        .section-card { background: white; border-radius: 2rem; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; margin-bottom: 2.5rem; }
+        .highlight-box { padding: 1.25rem; border-radius: 1rem; margin-bottom: 1rem; border-left-width: 4px; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <div class="max-w-6xl mx-auto">
-        <header class="text-center mb-12">
-            <h1 class="text-4xl font-extrabold tracking-tight mb-3 text-slate-900">🌊 Analisis Maritim Binuangeun</h1>
-            <div class="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest">
-                Data Reanalisis ERA5 (1980-2024)
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-black tracking-tight mb-4 text-slate-900 leading-tight">Analisis Maritim<br><span class="text-blue-600">Binuangeun</span></h1>
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-full text-[10px] font-bold uppercase tracking-[0.2em]">
+                <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Data Reanalisis ERA5 (1980-2024)
             </div>
         </header>
 
-        <section class="section-card border-l-8 border-l-blue-500">
-            <div class="flex flex-col md:flex-row gap-10">
-                <div class="md:w-1/2">
-                    <div class="feature-icon bg-blue-100">🐟</div>
-                    <h2 class="text-2xl font-black mb-4">Analisis Pengeringan & Nelayan</h2>
-                    <p class="text-slate-600 mb-6 leading-relaxed">Analisis ini membantu nelayan menentukan kapan waktu paling efisien untuk menjemur hasil tangkapan agar awet dan berkualitas tinggi.</p>
-                    
-                    <div class="space-y-4">
-                        <div class="p-4 bg-blue-50 rounded-xl">
-                            <h4 class="font-bold text-blue-800 underline mb-1">Puncak Pengeringan (Terbaik)</h4>
-                            <p class="text-sm text-blue-700">Agustus - Oktober: Angin kencang dan radiasi matahari stabil mempercepat proses penguapan pada ikan.</p>
-                        </div>
-                        <div class="p-4 bg-amber-50 rounded-xl">
-                            <h4 class="font-bold text-amber-800 underline mb-1">Kondisi Laut (Safety)</h4>
-                            <p class="text-sm text-amber-700">Maret & April: Gelombang paling tenang ($< 1.75$m), sangat aman untuk kapal nelayan tradisional.</p>
-                        </div>
+        <section class="section-card">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <div class="text-4xl mb-4">🐟</div>
+                    <h2 class="text-3xl font-black mb-6 text-slate-800 tracking-tight">Potensi Pengeringan Ikan</h2>
+                    <div class="highlight-box bg-blue-50 border-blue-500">
+                        <h4 class="font-bold text-blue-900 mb-1">Kapan Waktu Terbaik Menjemur?</h4>
+                        <p class="text-sm text-blue-800 leading-relaxed">Berdasarkan tren 45 tahun, <strong>Agustus hingga Oktober</strong> adalah periode emas. Kecepatan angin yang stabil membantu penguapan air pada ikan lebih merata.</p>
+                    </div>
+                    <div class="highlight-box bg-emerald-50 border-emerald-500">
+                        <h4 class="font-bold text-emerald-900 mb-1">Keamanan Melaut</h4>
+                        <p class="text-sm text-emerald-800 leading-relaxed">Bulan <strong>Maret</strong> menunjukkan gelombang paling tenang ($1.70$ m), memberikan risiko kecelakaan kerja paling minim bagi nelayan lokal.</p>
                     </div>
                 </div>
-                <div class="md:w-1/2">
-                    <h4 class="text-center font-bold text-slate-400 text-xs uppercase mb-4 tracking-widest">Grafik Tinggi Gelombang Bulanan</h4>
+                <div class="lg:w-1/2 w-full">
                     <canvas id="chartIkan"></canvas>
                 </div>
             </div>
         </section>
 
-        <section class="section-card border-r-8 border-r-orange-500">
-            <div class="flex flex-col md:flex-row-reverse gap-10">
-                <div class="md:w-1/2">
-                    <div class="feature-icon bg-orange-100">🧂</div>
-                    <h2 class="text-2xl font-black mb-4 text-right">Analisis Potensi Garam</h2>
-                    <p class="text-slate-600 mb-6 leading-relaxed text-right">Menghitung efektivitas kristalisasi air laut berdasarkan intensitas radiasi matahari dan curah hujan harian.</p>
-                    
-                    <div class="space-y-4">
-                        <div class="p-4 bg-orange-50 rounded-xl text-right">
-                            <h4 class="font-bold text-orange-800 underline mb-1">Bulan Panen Raya</h4>
-                            <p class="text-sm text-orange-700">September: Radiasi mencapai puncak ($85.55$ W/m²) dengan curah hujan terendah ($0.10$ mm). Kualitas garam terbaik.</p>
-                        </div>
-                        <div class="p-4 bg-slate-100 rounded-xl text-right">
-                            <h4 class="font-bold text-slate-800 underline mb-1">Masa Persiapan Tambak</h4>
-                            <p class="text-sm text-slate-700">Mei - Juni: Transisi ke musim kemarau. Waktu yang tepat untuk pemadatan tanah tambak.</p>
-                        </div>
+        <section class="section-card">
+            <div class="flex flex-col lg:flex-row-reverse gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <div class="text-4xl mb-4 text-right">🧂</div>
+                    <h2 class="text-3xl font-black mb-6 text-slate-800 tracking-tight text-right">Produksi Garam Rakyat</h2>
+                    <div class="highlight-box bg-orange-50 border-orange-500 text-right">
+                        <h4 class="font-bold text-orange-900 mb-1">Efisiensi Kristalisasi</h4>
+                        <p class="text-sm text-orange-800 leading-relaxed">Puncak produksi terjadi pada bulan <strong>September</strong>. Radiasi matahari mencapai titik tertinggi ($85.55$ W/m²) yang sangat efektif untuk memicu kristalisasi garam.</p>
+                    </div>
+                    <div class="highlight-box bg-slate-100 border-slate-400 text-right">
+                        <h4 class="font-bold text-slate-900 mb-1">Faktor Penghambat</h4>
+                        <p class="text-sm text-slate-700 leading-relaxed">Hindari produksi pada <strong>Januari</strong>. Curah hujan yang tinggi ($0.52$ mm) dapat merusak kadar salinitas pada tambak garam terbuka.</p>
                     </div>
                 </div>
-                <div class="md:w-1/2">
-                    <h4 class="text-center font-bold text-slate-400 text-xs uppercase mb-4 tracking-widest">Grafik Intensitas Matahari (Solar)</h4>
+                <div class="lg:w-1/2 w-full">
                     <canvas id="chartGaram"></canvas>
                 </div>
             </div>
         </section>
 
-        <footer class="mt-20 mb-10 text-center border-t border-slate-200 pt-10">
-            <div class="bg-slate-900 text-white inline-block px-10 py-6 rounded-[2rem] shadow-2xl">
-                <p class="text-blue-400 font-bold tracking-[0.2em] mb-2 uppercase text-xs">Final Submission</p>
-                <h3 class="text-xl font-black mb-1">Project UAS PILA 2025</h3>
-                <div class="h-px bg-slate-700 w-full my-4"></div>
-                <p class="text-slate-300 text-sm font-medium">Tasya Nadya Putri <span class="text-slate-500">(12923031)</span></p>
-                <p class="text-slate-300 text-sm font-medium">Ulani Indah Kirana <span class="text-slate-500">(12923030)</span></p>
+        <footer class="mt-24 mb-12 text-center">
+            <div class="inline-block relative">
+                <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-24 h-1 bg-blue-600 rounded-full"></div>
+                
+                <div class="bg-white border border-slate-200 px-12 py-10 rounded-[3rem] shadow-xl relative overflow-hidden">
+                    <p class="text-blue-600 font-black tracking-[0.3em] mb-4 uppercase text-xs">Final Project Submission</p>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mb-6">Project UAS PILA 2025</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 text-left border-t border-slate-100 pt-8">
+                        <div>
+                            <p class="text-slate-400 text-[10px] font-bold uppercase mb-1 tracking-widest">Penyusun 1</p>
+                            <p class="text-slate-800 font-bold text-lg leading-none">Tasya Nadya Putri</p>
+                            <p class="text-slate-500 text-sm font-medium mt-1">NIM: 12923031</p>
+                        </div>
+                        <div class="md:border-l md:pl-8 border-slate-100">
+                            <p class="text-slate-400 text-[10px] font-bold uppercase mb-1 tracking-widest">Penyusun 2</p>
+                            <p class="text-slate-800 font-bold text-lg leading-none">Ulani Indah Kirana</p>
+                            <p class="text-slate-500 text-sm font-medium mt-1">NIM: 12923030</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="mt-6 text-slate-400 text-[10px] uppercase font-bold tracking-widest italic">Program Studi Oseanografi • ITB</p>
+            <p class="mt-8 text-slate-400 text-[10px] font-bold uppercase tracking-[0.5em]">Program Studi Oseanografi • ITB</p>
         </footer>
     </div>
 
@@ -109,6 +113,7 @@
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { beginAtZero: false, grid: { color: '#f1f5f9' } },
@@ -119,7 +124,7 @@
         }
 
         window.onload = function() {
-            makeChart('chartIkan', 'Gelombang (m)', shcData, '#3b82f6');
+            makeChart('chartIkan', 'Tinggi Gelombang (m)', shcData, '#3b82f6');
             makeChart('chartGaram', 'Solar (W/m²)', ssrdData, '#f97316');
         };
     </script>
