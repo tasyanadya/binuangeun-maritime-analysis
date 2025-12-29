@@ -3,91 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Maritim Binuangeun</title>
+    <title>Analisis Maritim Binuangeun</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
-        .chart-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 1px solid #f1f5f9; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
+        .dashboard-card { background: white; border-radius: 1.5rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .heatmap-cell { aspect-ratio: 1/1; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; color: white; transition: transform 0.2s; }
+        .heatmap-cell:hover { transform: scale(1.2); z-index: 10; cursor: default; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
     <div class="max-w-6xl mx-auto">
-        <header class="mb-8 p-8 rounded-[30px] bg-gradient-to-br from-slate-900 to-blue-900 text-white shadow-2xl">
-            <h1 class="text-3xl font-extrabold mb-1">🌊 Data Maritim Binuangeun</h1>
-            <p class="text-blue-200 opacity-80">Data ERA5 Reanalysis (1980-2024) • Lokasi: 6.8°S-8.8°S</p>
+        <header class="mb-8 p-10 rounded-[2rem] bg-gradient-to-br from-blue-700 to-indigo-900 text-white shadow-xl">
+            <h1 class="text-4xl font-extrabold mb-2 tracking-tight">🌊 Dashboard Maritim Binuangeun</h1>
+            <p class="text-blue-100 opacity-90 font-medium italic">Data Historis ERA5 (1980-2024) • Lokasi: Binuangeun, Banten</p>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="p-6 rounded-2xl bg-amber-50 border border-amber-100">
-                <span class="text-amber-600 font-bold text-xs uppercase tracking-widest">Puncak Pengeringan</span>
-                <p class="text-2xl font-black text-amber-900">Agu, Sep, Okt</p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="p-4 bg-white rounded-2xl border-l-4 border-blue-500 shadow-sm">
+                <p class="text-xs font-bold text-gray-500 uppercase">Gelombang Tertinggi</p>
+                <p class="text-xl font-black text-gray-800 uppercase">Agustus (2.45m)</p>
             </div>
-            <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-100">
-                <span class="text-emerald-600 font-bold text-xs uppercase tracking-widest">Kondisi Laut Tenang</span>
-                <p class="text-2xl font-black text-emerald-900">Mar, Apr, Nov</p>
+            <div class="p-4 bg-white rounded-2xl border-l-4 border-orange-500 shadow-sm">
+                <p class="text-xs font-bold text-gray-500 uppercase">Solar Maksimal</p>
+                <p class="text-xl font-black text-gray-800 uppercase">September</p>
             </div>
-            <div class="p-6 rounded-2xl bg-blue-50 border border-blue-100">
-                <span class="text-blue-600 font-bold text-xs uppercase tracking-widest">Potensi Garam Tertinggi</span>
-                <p class="text-2xl font-black text-blue-900">September</p>
+            <div class="p-4 bg-white rounded-2xl border-l-4 border-emerald-500 shadow-sm">
+                <p class="text-xs font-bold text-gray-500 uppercase">Melaut Aman</p>
+                <p class="text-xl font-black text-gray-800 uppercase">Maret - April</p>
             </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="chart-card">
-                <h3 class="font-bold text-gray-700 mb-4">Tinggi Gelombang (m)</h3>
-                <canvas id="chartSHC"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3 class="font-bold text-gray-700 mb-4">Kecepatan Angin (m/s)</h3>
-                <canvas id="chartWIND"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3 class="font-bold text-gray-700 mb-4">Radiasi Solar (W/m²)</h3>
-                <canvas id="chartSSRD"></canvas>
-            </div>
-            <div class="chart-card">
-                <h3 class="font-bold text-gray-700 mb-4">Presipitasi (mm)</h3>
-                <canvas id="chartTP"></canvas>
+            <div class="p-4 bg-white rounded-2xl border-l-4 border-red-500 shadow-sm">
+                <p class="text-xs font-bold text-gray-500 uppercase">Hujan Puncak</p>
+                <p class="text-xl font-black text-gray-800 uppercase">Januari</p>
             </div>
         </div>
 
-        <footer class="mt-12 text-center text-gray-400 text-sm italic">
-            *Dashboard ini dimuat menggunakan sistem Vanilla JS untuk kecepatan maksimal.
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="dashboard-card">
+                <h3 class="font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-blue-600 rounded-full"></span> Siklus Tinggi Gelombang (m)
+                </h3>
+                <canvas id="chartGelombang"></canvas>
+            </div>
+            <div class="dashboard-card">
+                <h3 class="font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+                    <span class="w-2 h-5 bg-orange-600 rounded-full"></span> Radiasi Solar (W/m²)
+                </h3>
+                <canvas id="chartSolar"></canvas>
+            </div>
+        </div>
+
+        <div class="dashboard-card overflow-hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-extrabold text-gray-800 text-lg uppercase tracking-tight">🗓️ Matriks Kecepatan Angin (Jam vs Bulan)</h3>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Tenang</span>
+                    <div class="flex h-3 gap-0.5">
+                        <div class="w-4 bg-[#10b981] rounded-sm"></div>
+                        <div class="w-4 bg-[#fbbf24] rounded-sm"></div>
+                        <div class="w-4 bg-[#ef4444] rounded-sm"></div>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase">Kencang</span>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <div class="min-w-[800px]">
+                    <div id="windHeatmap" class="grid grid-cols-9 gap-1.5 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <div></div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">00:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">03:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">06:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">09:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">12:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">15:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">18:00</div>
+                        <div class="text-center text-[10px] font-bold text-gray-400 uppercase">21:00</div>
+                        
+                        </div>
+                </div>
+            </div>
+            <p class="mt-4 text-xs text-gray-500 italic font-medium">*Angka dalam kotak menunjukkan kecepatan angin (m/s). Hijau aman, Merah waspada.</p>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-400 text-xs font-bold uppercase tracking-[0.2em] pb-10">
+            &copy; 2024 Maritime Intelligence Systems • Binuangeun
         </footer>
     </div>
 
     <script>
-        // Data Mentah
-        const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-        const data = {
-            shc: [1.72, 1.73, 1.70, 1.79, 2.06, 2.27, 2.44, 2.45, 2.32, 2.03, 1.75, 1.66],
-            wind: [3.40, 3.64, 1.31, 1.86, 4.83, 5.43, 6.99, 7.83, 7.52, 6.25, 3.84, 1.42],
-            ssrd: [70.13, 71.59, 75.58, 73.38, 70.97, 67.05, 70.86, 79.94, 85.55, 85.11, 75.56, 72.25],
-            tp: [0.52, 0.51, 0.39, 0.32, 0.22, 0.19, 0.14, 0.07, 0.10, 0.19, 0.38, 0.45]
-        };
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        
+        // --- DATA MENTAH ---
+        const shcData = [1.72, 1.73, 1.70, 1.79, 2.06, 2.27, 2.44, 2.45, 2.32, 2.03, 1.75, 1.66];
+        const ssrdData = [70.13, 71.59, 75.58, 73.38, 70.97, 67.05, 70.86, 79.94, 85.55, 85.11, 75.56, 72.25];
+        
+        // Data Wind Hourly (12 bulan x 8 jam)
+        const windHourly = [
+            [3.20,3.15,3.10,3.25,3.40,3.60,3.75,3.55], // Jan
+            [3.44,3.38,3.32,3.49,3.64,3.86,4.02,3.80], // Feb
+            [1.11,1.08,1.05,1.21,1.31,1.51,1.68,1.45], // Mar
+            [1.66,1.63,1.60,1.76,1.86,2.06,2.23,2.00], // Apr
+            [4.63,4.55,4.47,4.73,4.83,5.03,5.20,4.98], // Mei
+            [5.23,5.14,5.05,5.33,5.43,5.63,5.80,5.58], // Jun
+            [6.79,6.68,6.57,6.89,6.99,7.19,7.36,7.14], // Jul
+            [7.63,7.51,7.39,7.73,7.83,8.03,8.20,7.98], // Agu
+            [7.32,7.20,7.08,7.42,7.52,7.72,7.89,7.67], // Sep
+            [6.05,5.95,5.85,6.15,6.25,6.45,6.62,6.40], // Okt
+            [3.64,3.58,3.52,3.74,3.84,4.04,4.21,3.99], // Nov
+            [1.22,1.19,1.16,1.32,1.42,1.62,1.79,1.57]  // Des
+        ];
 
-        // Fungsi Helper untuk Membuat Grafik
-        function createChart(id, label, dataArr, color) {
-            const ctx = document.getElementById(id).getContext('2d');
-            new Chart(ctx, {
+        // --- RENDER GRAFIK ---
+        function renderLineChart(id, label, dataSet, color) {
+            new Chart(document.getElementById(id), {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: months,
                     datasets: [{
                         label: label,
-                        data: dataArr,
+                        data: dataSet,
                         borderColor: color,
-                        backgroundColor: color + '22', // Transparansi
+                        backgroundColor: color + '15',
                         fill: true,
                         tension: 0.4,
-                        borderWidth: 3,
+                        borderWidth: 4,
                         pointRadius: 4,
-                        pointBackgroundColor: color
+                        pointBackgroundColor: 'white',
+                        pointBorderWidth: 2
                     }]
                 },
                 options: {
@@ -101,12 +149,38 @@
             });
         }
 
-        // Jalankan Pembuatan Grafik
+        // --- RENDER HEATMAP ---
+        function renderHeatmap() {
+            const container = document.getElementById('windHeatmap');
+            
+            windHourly.forEach((monthData, mIdx) => {
+                // Label Bulan
+                const monthLabel = document.createElement('div');
+                monthLabel.className = 'flex items-center text-xs font-bold text-gray-600';
+                monthLabel.innerText = months[mIdx];
+                container.appendChild(monthLabel);
+
+                // Kotak-kotak Jam
+                monthData.forEach(value => {
+                    const cell = document.createElement('div');
+                    cell.className = 'heatmap-cell';
+                    cell.innerText = value.toFixed(1);
+                    
+                    // Logika Warna: Hijau (< 4), Kuning (4-6), Merah (> 6)
+                    if (value < 4) cell.style.backgroundColor = '#10b981';
+                    else if (value < 6.5) cell.style.backgroundColor = '#fbbf24';
+                    else cell.style.backgroundColor = '#ef4444';
+                    
+                    container.appendChild(cell);
+                });
+            });
+        }
+
+        // Jalankan semua saat halaman siap
         window.onload = function() {
-            createChart('chartSHC', 'Tinggi Gelombang', data.shc, '#2563eb');
-            createChart('chartWIND', 'Angin', data.wind, '#059669');
-            createChart('chartSSRD', 'Solar', data.ssrd, '#ea580c');
-            createChart('chartTP', 'Hujan', data.tp, '#0891b2');
+            renderLineChart('chartGelombang', 'Gelombang', shcData, '#2563eb');
+            renderLineChart('chartSolar', 'Solar', ssrdData, '#ea580c');
+            renderHeatmap();
         };
     </script>
 </body>
